@@ -268,18 +268,18 @@ LIBAROMA_STREAMP libaroma_stream_zip(
  * Descriptions: new stream from memory range
  */
 LIBAROMA_STREAMP libaroma_stream_mem(
-    bytep mem, int mem_sz) {
+    uint64_t mem, uint64_t mem_sz) {
   if (!mem || !mem_sz) {
     ALOGW("libaroma_stream_mem mem/mem_sz is invalid");
     return 0;
   }
   LIBAROMA_STREAMP ret  = (LIBAROMA_STREAMP) malloc(sizeof(LIBAROMA_STREAM));
-  ret->data     = mem;
-  ret->size     = mem_sz;
+  ret->data     = (voidp)(uintptr_t)mem;
+  ret->size     = (uintptr_t)mem_sz;
   ret->ismmap   = 0;
   ret->ismem    = 1;
   snprintf(ret->uri, LIBAROMA_STREAM_URI_LENGTH,
-      "mem://0x%x-0x%x", (unsigned int)mem, mem_sz);
+      "mem://0x%016llx-0x%016llx", mem, mem_sz);
   return ret;
 } /* End of libaroma_stream_mem */
 
@@ -332,17 +332,17 @@ LIBAROMA_STREAMP libaroma_stream(
   }
 #endif
   else if (strcmp(kwd, "mem://") == 0) {
-    unsigned int mem;
-    int mem_sz;
+    uint64_t mem;
+    uint64_t mem_sz;
     int rc;
 
-    rc = sscanf(uri+6, "0x%x-0x%x", &mem, &mem_sz);
+    rc = sscanf(uri+6, "0x%016llx-0x%016llx", &mem, &mem_sz);
     if (rc!=2) {
       ALOGW("libaroma_stream_mem range format is invalid");
       return NULL;
     }
 
-    return libaroma_stream_mem((bytep)mem, mem_sz);
+    return libaroma_stream_mem(mem, mem_sz);
   }
   else if (_libaroma_stream_uri_cb != NULL) {
     return _libaroma_stream_uri_cb(uri);

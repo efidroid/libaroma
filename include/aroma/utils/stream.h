@@ -111,7 +111,7 @@ LIBAROMA_STREAMP libaroma_stream_zip(
  * Descriptions: new stream from memory range
  */
 LIBAROMA_STREAMP libaroma_stream_mem(
-    bytep mem, int mem_sz);
+    uint64_t mem, uint64_t mem_sz);
 
 /*
  * Function    : libaroma_stream

@@ -300,8 +300,8 @@ void libaroma_textline_draw(
         break;
       case _LIBAROMA_TEXTSPAN_HR: {
           /* horizontal line */
-          short hrwidth = (short) HIWORD((dword) span->data);
-          word  hrcolor = LOWORD((dword) span->data);
+          short hrwidth = (short) HIWORD((dword) (uintptr_t) span->data);
+          word  hrcolor = LOWORD((dword) (uintptr_t) span->data);
           int linesize  = ceil(line->h / 10.0);
           libaroma_draw_rect(
             canvas,
